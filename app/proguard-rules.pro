@@ -61,6 +61,9 @@
 #保持数据封装类
 -keep class * exends com.eric.myfunny.bean.CommonResResult
 
+#保持baselib相关类
+-keep class com.eric.baselib.**
+
 # 保持测试相关的代码
 -dontnote junit.framework.**
 -dontnote junit.runner.**

@@ -2,6 +2,9 @@ package com.eric.baselib.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.view.View;
 
 import com.eric.baselib.views.snack.MySnackbar;
 
@@ -51,7 +54,28 @@ public class Util {
 //        params.topMargin = ScreenUtil.getActionBarHeight(activity);
 //        snackBar.getView().setLayoutParams(params);
 //        snackBar.show();
-        MySnackbar.make(activity.getWindow().getDecorView(), msg, MySnackbar.LENGTH_SHORT, APPEAR_FROM_TOP_TO_DOWN).show();
+        toast(activity.getWindow().getDecorView(), msg);
     }
 
+    public static void toast(View view, String msg) {
+        MySnackbar.make(view, msg, MySnackbar.LENGTH_SHORT, APPEAR_FROM_TOP_TO_DOWN).show();
+    }
+
+    /**
+     * 监测当前网络连接是否可用
+     */
+    public static boolean isNetAvailable(Context context) {
+        if (context != null) {
+            ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            if (connectivityManager != null) {
+                NetworkInfo info = connectivityManager.getActiveNetworkInfo();
+                // 当前网络是连接的
+                if (info != null && info.isConnected()) {
+                    // 当前所连接的网络可用
+                    return info.isAvailable();
+                }
+            }
+        }
+        return false;
+    }
 }

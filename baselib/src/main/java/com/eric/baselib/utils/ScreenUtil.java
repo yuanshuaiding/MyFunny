@@ -11,6 +11,8 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.lang.reflect.Field;
+
 /**
  * author : Eric
  * e-mail : yuanshuai@bertadata.com
@@ -27,8 +29,10 @@ public class ScreenUtil {
 
 
     private static int mStatusHeight = -1;
+
     /**
      * 获得状态栏的高度
+     *
      * @return mStatusHeight
      */
     public static int getStatusHeight(Context context) {
@@ -43,12 +47,31 @@ public class ScreenUtil {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        if (mStatusHeight <= 0) {
+            //通过反射获取
+            Class<?> c;
+            Object obj;
+            Field field;
+            int x;
+            int sbar = Util.dip2px(context, 20);
+            try {
+                c = Class.forName("com.android.internal.R$dimen");
+                obj = c.newInstance();
+                field = c.getField("status_bar_height");
+                x = Integer.parseInt(field.get(obj).toString());
+                sbar = context.getResources().getDimensionPixelSize(x);
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+            mStatusHeight = sbar;
+        }
         return mStatusHeight;
     }
 
 
     /**
      * 获取当前屏幕截图，不包含状态栏
+     *
      * @return bp
      */
     public static Bitmap snapShotWithoutStatusBar(Activity activity) {
@@ -73,28 +96,28 @@ public class ScreenUtil {
      * 获取actionbar的像素高度，默认使用android官方兼容包做actionbar兼容
      */
     public static int getActionBarHeight(Context context) {
-        int actionBarHeight=0;
-        if(context instanceof AppCompatActivity  &&((AppCompatActivity) context).getSupportActionBar()!=null) {
+        int actionBarHeight = 0;
+        if (context instanceof AppCompatActivity && ((AppCompatActivity) context).getSupportActionBar() != null) {
             Log.d("isAppCompatActivity", "==AppCompatActivity");
             actionBarHeight = ((AppCompatActivity) context).getSupportActionBar().getHeight();
-        }else if(context instanceof Activity && ((Activity) context).getActionBar()!=null) {
-            Log.d("isActivity","==Activity");
+        } else if (context instanceof Activity && ((Activity) context).getActionBar() != null) {
+            Log.d("isActivity", "==Activity");
             actionBarHeight = ((Activity) context).getActionBar().getHeight();
         }
         if (actionBarHeight != 0)
             return actionBarHeight;
         final TypedValue tv = new TypedValue();
-        if(context.getTheme().resolveAttribute( android.support.v7.appcompat.R.attr.actionBarSize, tv, true)){
+        if (context.getTheme().resolveAttribute(android.support.v7.appcompat.R.attr.actionBarSize, tv, true)) {
             if (context.getTheme().resolveAttribute(android.support.v7.appcompat.R.attr.actionBarSize, tv, true))
                 actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, context.getResources().getDisplayMetrics());
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             if (context.getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true))
                 actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, context.getResources().getDisplayMetrics());
-        }else {
+        } else {
             if (context.getTheme().resolveAttribute(android.support.v7.appcompat.R.attr.actionBarSize, tv, true))
                 actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, context.getResources().getDisplayMetrics());
         }
-        Log.d("actionBarHeight","===="+actionBarHeight);
+        Log.d("actionBarHeight", "====" + actionBarHeight);
         return actionBarHeight;
     }
 
@@ -102,7 +125,7 @@ public class ScreenUtil {
     /**
      * 设置view margin
      */
-    public static void setMargins (View v, int l, int t, int r, int b) {
+    public static void setMargins(View v, int l, int t, int r, int b) {
         if (v.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
             ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
             p.setMargins(l, t, r, b);

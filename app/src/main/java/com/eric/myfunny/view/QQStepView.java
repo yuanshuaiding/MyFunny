@@ -1,5 +1,6 @@
 package com.eric.myfunny.view;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -10,7 +11,6 @@ import android.graphics.RectF;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 import com.eric.baselib.utils.Util;
@@ -29,6 +29,7 @@ public class QQStepView extends View {
     private final Paint mPaint;//画笔
     private final Rect textBounds;
     private float mCurrentStep;
+    private float mProgressStep;
     private int mOuterCicleColor;
     private int mInnerCicleColor;
     private int mTextColor;
@@ -36,6 +37,7 @@ public class QQStepView extends View {
     private int mLineWidth;
     private RectF mDrawRect;//绘制范围
     private float mMaxStep = 100;
+    private float mDuration;
 
     public QQStepView(Context context) {
         this(context, null);
@@ -60,6 +62,7 @@ public class QQStepView extends View {
             mLineWidth = (int) typedArray.getDimension(R.styleable.QQStepView_lineWidth, 5);
             mMaxStep = typedArray.getFloat(R.styleable.QQStepView_maxStep, mMaxStep);
             mCurrentStep = typedArray.getFloat(R.styleable.QQStepView_step, 0);
+            mDuration = typedArray.getFloat(R.styleable.QQStepView_duration, 1000);
             typedArray.recycle();
         }
 
@@ -70,7 +73,6 @@ public class QQStepView extends View {
         mPaint.setStrokeCap(Paint.Cap.ROUND);
         mPaint.setStrokeWidth(mLineWidth);
         textBounds = new Rect();
-        setSteps(mCurrentStep);
     }
 
     /**
@@ -121,7 +123,7 @@ public class QQStepView extends View {
         canvas.drawArc(mDrawRect, 135, 270, false, mPaint);
         //2.绘制内圆弧
         mPaint.setColor(mInnerCicleColor);
-        float rate = mCurrentStep / mMaxStep;
+        float rate = mProgressStep / mMaxStep;
         if (rate > 1)
             rate = 1;
         float sweepAngle = 270 * (rate);
@@ -129,7 +131,7 @@ public class QQStepView extends View {
         //2.绘制文本,难点是找到绘制的起始点
         int dx = getWidth() / 2;
         int dy = getHeight() / 2;
-        String mText = ((int) mCurrentStep) + "";
+        String mText = ((int) mProgressStep) + "";
         if (!TextUtils.isEmpty(mText)) {
             mPaint.reset();
             mPaint.setColor(mTextColor);
@@ -147,12 +149,44 @@ public class QQStepView extends View {
         }
     }
 
-    public void setSteps(float steps) {
-        mCurrentStep = steps;
+    /**
+     * 设置当前值
+     */
+    private void initSteps(float steps) {
+        mProgressStep = steps;
         invalidate();
     }
 
+    /**
+     * 重新设置当前进度
+     */
+    public void updateSteps(float mSteps) {
+        mCurrentStep = mSteps;
+        if (mCurrentStep > mMaxStep)
+            mCurrentStep = mMaxStep;
+        ValueAnimator animator = ValueAnimator.ofFloat(0, mCurrentStep).setDuration((long) mDuration);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                initSteps((Float) animation.getAnimatedValue());
+            }
+        });
+        animator.start();
+    }
+
+    /**
+     * 设置最大值
+     */
     public void setMaxSteps(float steps) {
-        mMaxStep=steps;
+        mMaxStep = steps;
+    }
+
+    /**
+     * 设置动画时长
+     *
+     * @param duration 毫秒
+     */
+    public void setDuration(float duration) {
+        this.mDuration = duration;
     }
 }

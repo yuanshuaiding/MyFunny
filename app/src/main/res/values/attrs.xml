@@ -24,6 +24,7 @@
         <attr name="lineWidth" format="dimension" />
         <attr name="step" format="float" />
         <attr name="maxStep" format="float" />
+        <attr name="duration" format="float" />
         <!--自定义文字颜色直接使用系统属性-->
         <attr name="android:textColor" />
         <!--自定义文字大小直接使用系统属性-->

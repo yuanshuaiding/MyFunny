@@ -1,6 +1,5 @@
 package com.eric.myfunny.activity;
 
-import android.animation.ValueAnimator;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -23,7 +22,6 @@ public class MainActivity extends BaseActivity {
 
     @BindView(R.id.qq_step)
     private QQStepView qqStepView;
-    private int progress;
     private float mSteps = 65;
 
     @Override
@@ -38,28 +36,17 @@ public class MainActivity extends BaseActivity {
 //        onClick1(null);
 
         qqStepView.setMaxSteps(300);
-        updateSteps(mSteps);
+        qqStepView.setDuration(1000);
+        qqStepView.updateSteps(mSteps);
         qqStepView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                progress = 0;
                 mSteps = mSteps + 10;
                 if (mSteps > 300)
                     mSteps = 300;
-                updateSteps(mSteps);
+                qqStepView.updateSteps(mSteps);
             }
         });
-    }
-
-    private void updateSteps(float mSteps) {
-        ValueAnimator animator = ValueAnimator.ofFloat(0, mSteps).setDuration(1000);
-        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                qqStepView.setSteps((Float) animation.getAnimatedValue());
-            }
-        });
-        animator.start();
     }
 
     @OnClicked(R.id.ll_section1)

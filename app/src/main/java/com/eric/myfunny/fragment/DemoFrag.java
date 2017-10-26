@@ -1,4 +1,4 @@
-package com.eric.myfunny;
+package com.eric.myfunny.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.eric.baselib.ioc.BindView;
 import com.eric.baselib.ioc.ViewUtils;
+import com.eric.myfunny.R;
 
 import java.util.ArrayList;
 import java.util.List;

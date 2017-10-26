@@ -44,6 +44,12 @@
 -keepattributes SourceFile,LineNumberTable
 #保持泛型
 -keepattributes Signature
+#保持注解
+-keepattributes *Annotation*
+-keep class * extends java.lang.annotation.Annotation
+-keepclasseswithmembernames class * {
+    native <methods>;
+}
 
 #保持所有实现 Serializable 接口的类成员
 -keepclassmembers class * implements java.io.Serializable {
@@ -54,15 +60,41 @@
     java.lang.Object writeReplace();
     java.lang.Object readResolve();
 }
+-keep public class * implements java.io.Serializable {*;}
 
+
+# support-v4
+#https://stackoverflow.com/questions/18978706/obfuscate-android-support-v7-widget-gridlayout-issue
+-dontwarn android.support.v4.**
+-keep class android.support.v4.app.** { *; }
+-keep interface android.support.v4.app.** { *; }
+-keep class android.support.v4.** { *; }
+
+
+# support-v7
+-dontwarn android.support.v7.**
+-keep class android.support.v7.internal.** { *; }
+-keep interface android.support.v7.internal.** { *; }
+-keep class android.support.v7.** { *; }
+
+# support design
+#@link http://stackoverflow.com/a/31028536
+-dontwarn android.support.design.**
+-keep class android.support.design.** { *; }
+-keep interface android.support.design.** { *; }
+-keep public class android.support.design.R$* { *; }
+#-------------------------------------------------------------------------
 #Fragment不需要在AndroidManifest.xml中注册，需要额外保护下
 -keep public class * extends android.support.v4.app.Fragment
 -keep public class * extends android.app.Fragment
-#保持数据封装类
--keep class * exends com.eric.myfunny.bean.CommonResResult
 
 #保持baselib相关类
--keep class com.eric.baselib.**
+-dontwarn com.eric.baselib.**
+-keep class com.eric.baselib.** { *; }
+-keepclassmembers @com.eric.baselib.ioc.* class * {*;}
+-keepclassmembers class * {
+    @com.eric.baselib.ioc.OnClicked <methods>;
+}
 
 # 保持测试相关的代码
 -dontnote junit.framework.**

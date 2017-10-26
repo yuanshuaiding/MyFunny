@@ -1,16 +1,18 @@
 package com.eric.myfunny.activity;
 
+import android.animation.ValueAnimator;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.view.View;
 
+import com.eric.baselib.ioc.BindView;
 import com.eric.baselib.ioc.NetCheck;
 import com.eric.baselib.ioc.OnClicked;
 import com.eric.baselib.ioc.ViewUtils;
-import com.eric.myfunny.DemoFrag;
 import com.eric.myfunny.R;
+import com.eric.myfunny.view.QQStepView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,16 +21,45 @@ public class MainActivity extends BaseActivity {
 
     private List<Fragment> fragments = new ArrayList<>();
 
+    @BindView(R.id.qq_step)
+    private QQStepView qqStepView;
+    private int progress;
+    private float mSteps = 65;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.layout_myview);
         ViewUtils.inject(this);
-        fragments.add(DemoFrag.newInstance());
-        fragments.add(DemoFrag.newInstance());
-        fragments.add(DemoFrag.newInstance());
-        //viewpager.setAdapter(new MainViewPagerAdapter(getSupportFragmentManager()));
-        onClick1(null);
+//        fragments.add(DemoFrag.newInstance());
+//        fragments.add(DemoFrag.newInstance());
+//        fragments.add(DemoFrag.newInstance());
+//        //viewpager.setAdapter(new MainViewPagerAdapter(getSupportFragmentManager()));
+//        onClick1(null);
+
+        qqStepView.setMaxSteps(300);
+        updateSteps(mSteps);
+        qqStepView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                progress = 0;
+                mSteps = mSteps + 10;
+                if (mSteps > 300)
+                    mSteps = 300;
+                updateSteps(mSteps);
+            }
+        });
+    }
+
+    private void updateSteps(float mSteps) {
+        ValueAnimator animator = ValueAnimator.ofFloat(0, mSteps).setDuration(1000);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                qqStepView.setSteps((Float) animation.getAnimatedValue());
+            }
+        });
+        animator.start();
     }
 
     @OnClicked(R.id.ll_section1)
@@ -48,7 +79,7 @@ public class MainActivity extends BaseActivity {
 
     @OnClicked(R.id.img_head)
     @NetCheck("omg，网络断了")
-    private void showHeader(){
+    private void showHeader() {
         toast("显示大图");
     }
 

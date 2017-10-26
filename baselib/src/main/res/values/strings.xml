@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">baseLib</string>
+    <string name="msg_no_network">亲，您的网络出现问题，请检查</string>
 </resources>

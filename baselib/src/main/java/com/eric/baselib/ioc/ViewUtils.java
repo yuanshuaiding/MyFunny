@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.text.TextUtils;
 import android.view.View;
 
+import com.eric.baselib.R;
 import com.eric.baselib.utils.Util;
 
 import java.lang.reflect.Field;
@@ -100,13 +101,13 @@ public class ViewUtils {
 
         @Override
         public void onClick(View view) {
-            if (mNetCheck != null) {
-                String msg = "亲，您的网络出现问题，请检查";
+            if (mNetCheck != null && view != null) {
+                String msg = view.getContext().getString(R.string.msg_no_network);
                 String value = mNetCheck.value();
                 if (!TextUtils.isEmpty(value)) {
                     msg = value;
                 }
-                //监测网络状态
+                //监测网络状态,不可用则toast提示
                 if (!Util.isNetAvailable(view.getContext())) {
                     Util.toast(view, msg);
                     return;
@@ -116,7 +117,7 @@ public class ViewUtils {
                 mMethod.setAccessible(true);
                 Class<?>[] paramTypes = mMethod.getParameterTypes();
                 if (paramTypes != null && paramTypes.length > 0) {
-                    //先调用有参数的方法
+                    //调用有参数的方法
                     mMethod.invoke(mHolder, view);
                 } else {
                     //调用无参方法

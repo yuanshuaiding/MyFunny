@@ -142,9 +142,9 @@ public class QQStepView extends View {
             int txtWidth = textBounds.width();
             //Log.d(TAG, "文字宽度：" + txtWidth);
             dx = dx - txtWidth / 2;
-            int txtHeight = (mPaint.getFontMetricsInt().bottom - mPaint.getFontMetricsInt().top) / 2 - mPaint.getFontMetricsInt().bottom;
+            int y = (mPaint.getFontMetricsInt().bottom - mPaint.getFontMetricsInt().top) / 2 - mPaint.getFontMetricsInt().bottom;
             //Log.d(TAG, "文字高度：" + txtHeight);
-            dy = dy + txtHeight;
+            dy = dy + y;
             canvas.drawText(mText, dx, dy, mPaint);
         }
     }

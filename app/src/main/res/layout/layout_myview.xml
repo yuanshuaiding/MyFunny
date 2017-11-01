@@ -10,20 +10,29 @@
         android:id="@+id/qq_step"
         android:layout_width="200dp"
         android:layout_height="match_parent"
-        android:background="#f4f5f6"
-        android:textColor="#ce2c03"
+        android:textColor="#e802cd"
         android:textSize="28sp"
-        app:innerColor="#e6c909"
+        app:innerColor="#ce2c03"
         app:lineWidth="10dp"
         app:maxStep="2000"
-        app:outterColor="#e802cd"
+        app:outterColor="#e6c909"
         app:step="369" />
 
-    <com.eric.myfunny.view.MyTextView
+    <com.eric.myfunny.view.ExpandableTextView
+        android:id="@+id/expand_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="李峰啊几点发发发发发发发付付付付付"
+        android:textColor="@color/colorAccent"
+        app:collapseDrawable="@mipmap/icon_content_collap"
+        app:expandDrawable="@mipmap/icon_content_expand"
+        app:lines="3"
+        app:tipsColor="#08f017"
+        app:position="bottom_center" />
+
+    <Button
+        android:id="@+id/btn_click"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:arrowExpand="@drawable/ic_snack_ok"
-        app:arrowShrink="@drawable/ic_snack_error"
-        app:positions="center"
-        app:shrinkLines="5" />
+        android:text="click me"/>
 </LinearLayout>

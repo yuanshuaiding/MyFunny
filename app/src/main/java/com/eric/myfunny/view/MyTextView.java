@@ -47,18 +47,18 @@ public class MyTextView extends View {
     public MyTextView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         //获取自定义属性组
-        TypedArray myAttrs = context.obtainStyledAttributes(attrs, R.styleable.MyTextView);
+        //TypedArray myAttrs = context.obtainStyledAttributes(attrs, R.styleable.MyTextView);
         //获取指定自定义属性
-        shrinkLines = myAttrs.getInt(R.styleable.MyTextView_shrinkLines, 3);
-        position = myAttrs.getInt(R.styleable.MyTextView_positions, 0);
-        shrinkArrow = myAttrs.getDrawable(R.styleable.MyTextView_arrowShrink);
-        expandArrow = myAttrs.getDrawable(R.styleable.MyTextView_arrowExpand);
-        Log.d(TAG, "MyTextView: shrinkLines-->" + shrinkLines);
-        Log.d(TAG, "MyTextView: position-->" + position);
-        Log.d(TAG, "MyTextView: shrinkArrow-->" + shrinkArrow);
-        Log.d(TAG, "MyTextView: expandArrow-->" + expandArrow);
+//        shrinkLines = myAttrs.getInt(R.styleable.MyTextView_shrinkLines, 3);
+//        position = myAttrs.getInt(R.styleable.MyTextView_positions, 0);
+//        shrinkArrow = myAttrs.getDrawable(R.styleable.MyTextView_arrowShrink);
+//        expandArrow = myAttrs.getDrawable(R.styleable.MyTextView_arrowExpand);
+//        Log.d(TAG, "MyTextView: shrinkLines-->" + shrinkLines);
+//        Log.d(TAG, "MyTextView: position-->" + position);
+//        Log.d(TAG, "MyTextView: shrinkArrow-->" + shrinkArrow);
+//        Log.d(TAG, "MyTextView: expandArrow-->" + expandArrow);
         //回收资源
-        myAttrs.recycle();
+        //myAttrs.recycle();
     }
 
     /**

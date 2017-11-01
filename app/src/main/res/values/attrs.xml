@@ -1,19 +1,42 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <resources>
     <!--自定义View属性组声明-->
-    <declare-styleable name="MyTextView">
+    <!--<declare-styleable name="MyTextView">-->
+    <!--&lt;!&ndash;默认展示行数，只能使用整数&ndash;&gt;-->
+    <!--<attr name="shrinkLines" format="integer" />-->
+    <!--&lt;!&ndash;收缩后的图标，只能使用应用图片资源&ndash;&gt;-->
+    <!--<attr name="arrowShrink" format="reference" />-->
+    <!--&lt;!&ndash;展开后的图标，只能使用应用图片资源&ndash;&gt;-->
+    <!--<attr name="arrowExpand" format="reference" />-->
+    <!--&lt;!&ndash; positions属性只能指定<enum>声明的其中之一 &ndash;&gt;-->
+    <!--<attr name="positions">-->
+    <!--<enum name="start" value="0" />-->
+    <!--<enum name="center" value="1" />-->
+    <!--<enum name="end" value="2" />-->
+    <!--</attr>-->
+    <!--</declare-styleable>-->
+    <!--可折叠文本控件属性组声明-->
+    <declare-styleable name="ExpandableTextView">
         <!--默认展示行数，只能使用整数-->
-        <attr name="shrinkLines" format="integer" />
+        <attr name="lines" format="integer" />
         <!--收缩后的图标，只能使用应用图片资源-->
-        <attr name="arrowShrink" format="reference" />
+        <attr name="collapseDrawable" format="reference" />
         <!--展开后的图标，只能使用应用图片资源-->
-        <attr name="arrowExpand" format="reference" />
+        <attr name="expandDrawable" format="reference" />
+        <attr name="tipsColor" format="color" />
         <!-- positions属性只能指定<enum>声明的其中之一 -->
-        <attr name="positions">
-            <enum name="start" value="0" />
-            <enum name="center" value="1" />
-            <enum name="end" value="2" />
+        <attr name="position">
+            <enum name="align_right" value="0" />
+            <enum name="bottom_start" value="1" />
+            <enum name="bottom_center" value="2" />
+            <enum name="bottom_end" value="3" />
         </attr>
+        <!--自定义文字颜色直接使用系统属性-->
+        <attr name="android:textColor" />
+        <!--自定义文字大小直接使用系统属性-->
+        <attr name="android:textSize" />
+        <!--自定义文字直接使用系统属性-->
+        <attr name="android:text" />
     </declare-styleable>
     <attr name="myattr" format="string" />
 

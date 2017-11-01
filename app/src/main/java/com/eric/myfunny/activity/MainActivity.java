@@ -11,6 +11,7 @@ import com.eric.baselib.ioc.NetCheck;
 import com.eric.baselib.ioc.OnClicked;
 import com.eric.baselib.ioc.ViewUtils;
 import com.eric.myfunny.R;
+import com.eric.myfunny.view.ExpandableTextView;
 import com.eric.myfunny.view.QQStepView;
 
 import java.util.ArrayList;
@@ -22,6 +23,8 @@ public class MainActivity extends BaseActivity {
 
     @BindView(R.id.qq_step)
     private QQStepView qqStepView;
+    @BindView(R.id.expand_tv)
+    private ExpandableTextView expandableTextView;
     private float mSteps = 65;
 
     @Override
@@ -47,6 +50,11 @@ public class MainActivity extends BaseActivity {
                 qqStepView.updateSteps(mSteps);
             }
         });
+    }
+
+    @OnClicked(R.id.btn_click)
+    private void changeText(){
+        expandableTextView.setText(expandableTextView.getText()+" 我是后来添加的");
     }
 
     @OnClicked(R.id.ll_section1)

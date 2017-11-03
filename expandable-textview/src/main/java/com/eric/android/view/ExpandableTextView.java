@@ -1,4 +1,4 @@
-package com.eric.myfunny.view;
+package com.eric.android.view;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
@@ -22,8 +22,6 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.eric.myfunny.R;
-
 /**
  * author : Eric
  * e-mail : yuanshuai@bertadata.com
@@ -31,7 +29,6 @@ import com.eric.myfunny.R;
  * desc   : 可展开折叠的文本控件（使用LinearLayout封装）
  * version: 1.0
  */
-
 public class ExpandableTextView extends LinearLayout {
     private String TAG = this.getClass().getSimpleName();
     private final static String imgTag = "[img]";
@@ -46,7 +43,7 @@ public class ExpandableTextView extends LinearLayout {
     private final TextView mTvContentTemp;//收起后的内容
     private final TextView mTvExpand;//折叠控件
     private boolean mIsExpand;//是否折叠的标记
-    private String mOriginText;//展示的文本
+    private String mOriginText = "";//展示的文本
     private int mContentTextSize;
     private int mContentColor;
     private int mTipsColor;
@@ -90,14 +87,19 @@ public class ExpandableTextView extends LinearLayout {
             if (mCollapseDrawable != null) {
                 mCollapseDrawable.setBounds(0, 0, mContentTextSize, mContentTextSize);
             }
+            String expandLabel = typedArray.getString(R.styleable.ExpandableTextView_expandLabel);
+            if (!TextUtils.isEmpty(expandLabel)) {
+                TIP_EXPAND = expandLabel;
+            }
+            String collapseLabel = typedArray.getString(R.styleable.ExpandableTextView_collapseLabel);
+            if (!TextUtils.isEmpty(collapseLabel)) {
+                TIP_COLLAPSE = collapseLabel;
+            }
             typedArray.recycle();
         }
-
         setOrientation(VERTICAL);
-
         //加载布局
-        LayoutInflater.from(context).inflate(R.layout.layout_expadable_textview, this, true);
-
+        LayoutInflater.from(context).inflate(R.layout.layout_expandable_view, this, true);
         //获取文本控件
         mTvContent = findViewById(R.id.tv_content);
         //mTvContent.setVisibility(GONE);
@@ -161,7 +163,6 @@ public class ExpandableTextView extends LinearLayout {
         mOriginText = text;
         mTvContent.setText(mOriginText);
         mTvContentTemp.setText(mOriginText);
-
         mTvContent.post(new Runnable() {
             @Override
             public void run() {
@@ -177,6 +178,32 @@ public class ExpandableTextView extends LinearLayout {
     public void setText(String text) {
         mIsExpand = !mIsExpand;
         initText(text);
+    }
+
+    public void setExpandLabel(String label) {
+        if (!TextUtils.isEmpty(label)) {
+            TIP_EXPAND = label;
+        }
+    }
+
+    public void seCollapseLabel(String label) {
+        if (!TextUtils.isEmpty(label)) {
+            TIP_COLLAPSE = label;
+        }
+    }
+
+    public void setExpandDrawable(Drawable drawable) {
+        if (drawable != null) {
+            mExpandDrawable = drawable;
+            mExpandDrawable.setBounds(0, 0, mContentTextSize, mContentTextSize);
+        }
+    }
+
+    public void setCollapseDrawable(Drawable drawable) {
+        if (drawable != null) {
+            mCollapseDrawable = drawable;
+            mCollapseDrawable.setBounds(0, 0, mContentTextSize, mContentTextSize);
+        }
     }
 
     public String getText() {
@@ -324,7 +351,7 @@ public class ExpandableTextView extends LinearLayout {
                 for (int i = 0; i <= spaceCount; i++) {
                     space += space;
                 }
-                text+=space;
+                text += space;
             }
             SpannableStringBuilder spannable = new SpannableStringBuilder(text);
             setSpan(spannable);

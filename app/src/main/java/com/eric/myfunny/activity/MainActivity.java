@@ -4,14 +4,16 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewCompat;
 import android.view.View;
+import android.widget.Button;
 
+import com.eric.android.view.ExpandableTextView;
 import com.eric.baselib.ioc.BindView;
 import com.eric.baselib.ioc.NetCheck;
 import com.eric.baselib.ioc.OnClicked;
 import com.eric.baselib.ioc.ViewUtils;
 import com.eric.myfunny.R;
-import com.eric.myfunny.view.ExpandableTextView;
 import com.eric.myfunny.view.QQStepView;
 
 import java.util.ArrayList;
@@ -25,6 +27,8 @@ public class MainActivity extends BaseActivity {
     private QQStepView qqStepView;
     @BindView(R.id.expand_tv)
     private ExpandableTextView expandableTextView;
+    @BindView(R.id.btn_click)
+    private Button btn_click;
     private float mSteps = 65;
 
     @Override
@@ -37,7 +41,8 @@ public class MainActivity extends BaseActivity {
 //        fragments.add(DemoFrag.newInstance());
 //        //viewpager.setAdapter(new MainViewPagerAdapter(getSupportFragmentManager()));
 //        onClick1(null);
-
+        //ViewCompat.setTranslationZ(btn_click, 10);
+        ViewCompat.setElevation(btn_click, 100);
         qqStepView.setMaxSteps(300);
         qqStepView.setDuration(1000);
         qqStepView.updateSteps(mSteps);
@@ -53,8 +58,8 @@ public class MainActivity extends BaseActivity {
     }
 
     @OnClicked(R.id.btn_click)
-    private void changeText(){
-        expandableTextView.setText(expandableTextView.getText()+" 我是后来添加的");
+    private void changeText() {
+        expandableTextView.setText(expandableTextView.getText() + " 我是后来添加的");
     }
 
     @OnClicked(R.id.ll_section1)

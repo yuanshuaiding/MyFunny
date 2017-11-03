@@ -18,11 +18,10 @@
         app:outterColor="#e6c909"
         app:step="369" />
 
-    <com.eric.myfunny.view.ExpandableTextView
+    <com.eric.android.view.ExpandableTextView
         android:id="@+id/expand_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="李峰啊几点发发发发发发发付付付付付"
         android:textColor="@color/colorAccent"
         app:collapseDrawable="@mipmap/icon_content_collap"
         app:expandDrawable="@mipmap/icon_content_expand"
@@ -34,5 +33,6 @@
         android:id="@+id/btn_click"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
         android:text="click me"/>
 </LinearLayout>

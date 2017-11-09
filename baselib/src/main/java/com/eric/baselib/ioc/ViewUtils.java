@@ -45,45 +45,53 @@ public class ViewUtils {
 
     private static void injectFields(ViewFinder finder, Object holder) {
         if (finder == null || holder == null) return;
-        Class<?> clz = holder.getClass();
-        Field[] fields = clz.getDeclaredFields();
-        if (fields != null && fields.length > 0) {
-            for (Field field : fields) {
-                field.setAccessible(true);
-                BindView bindView = field.getAnnotation(BindView.class);
-                if (bindView != null) {
-                    int viewId = bindView.value();
-                    View view = finder.getView(viewId);
-                    try {
-                        field.set(holder, view);
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
+        try {
+            Class<?> clz = holder.getClass();
+            Field[] fields = clz.getDeclaredFields();
+            if (fields != null && fields.length > 0) {
+                for (Field field : fields) {
+                    field.setAccessible(true);
+                    BindView bindView = field.getAnnotation(BindView.class);
+                    if (bindView != null) {
+                        int viewId = bindView.value();
+                        View view = finder.getView(viewId);
+                        try {
+                            field.set(holder, view);
+                        } catch (IllegalAccessException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             }
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
     private static void injectEvents(ViewFinder finder, final Object holder) {
         if (finder == null || holder == null) return;
-        Class<?> clz = holder.getClass();
-        Method[] methods = clz.getDeclaredMethods();
-        if (methods != null && methods.length > 0) {
-            for (final Method method : methods) {
-                OnClicked onclick = method.getAnnotation(OnClicked.class);
-                NetCheck netCheck = method.getAnnotation(NetCheck.class);
-                if (onclick != null) {
-                    int[] viewIds = onclick.value();
-                    if (viewIds != null && viewIds.length > 0) {
-                        for (int viewId : viewIds) {
-                            View view = finder.getView(viewId);
-                            if (view != null) {
-                                view.setOnClickListener(new DeclaredOnClickListener(holder, method, netCheck));
+        try {
+            Class<?> clz = holder.getClass();
+            Method[] methods = clz.getDeclaredMethods();
+            if (methods != null && methods.length > 0) {
+                for (final Method method : methods) {
+                    OnClicked onclick = method.getAnnotation(OnClicked.class);
+                    NetCheck netCheck = method.getAnnotation(NetCheck.class);
+                    if (onclick != null) {
+                        int[] viewIds = onclick.value();
+                        if (viewIds != null && viewIds.length > 0) {
+                            for (int viewId : viewIds) {
+                                View view = finder.getView(viewId);
+                                if (view != null) {
+                                    view.setOnClickListener(new DeclaredOnClickListener(holder, method, netCheck));
+                                }
                             }
                         }
                     }
                 }
             }
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 

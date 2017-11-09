@@ -24,10 +24,10 @@ import android.widget.TextView;
 
 /**
  * author : Eric
- * e-mail : yuanshuai@bertadata.com
+ * e-mail : yuanshuaiding@163.com
  * time   : 2017/10/26
  * desc   : 可展开折叠的文本控件（使用LinearLayout封装）
- * version: 1.0
+ * version: 1.0.2
  */
 public class ExpandableTextView extends LinearLayout {
     private String TAG = this.getClass().getSimpleName();
@@ -51,7 +51,6 @@ public class ExpandableTextView extends LinearLayout {
     private int mPosition = BOTTOM_CENTER;
     private Drawable mCollapseDrawable;
     private Drawable mExpandDrawable;
-    private int expandHeight;
     private int collapseHeight;
     private boolean fromUser;
     private int mTextTotalWidth;
@@ -130,7 +129,7 @@ public class ExpandableTextView extends LinearLayout {
         mTvContentTemp.setOnClickListener(clickListener);
         mTvExpand.setOnClickListener(clickListener);
         fromUser = false;
-        initText(mOriginText);
+        setText(mOriginText);
         //设置折叠展开标识控件的位置
         updateExpandArrowAndPosition(mPosition);
     }
@@ -180,18 +179,30 @@ public class ExpandableTextView extends LinearLayout {
         initText(text);
     }
 
+    /**
+     * 设置展开提示语，在setText方法之前调用
+     * @param label 展开提示语，如“展开”
+     */
     public void setExpandLabel(String label) {
         if (!TextUtils.isEmpty(label)) {
             TIP_EXPAND = label;
         }
     }
 
+    /**
+     * 设置折叠提示语，在setText方法之前调用
+     * @param label 折叠提示语，如“收起”
+     */
     public void seCollapseLabel(String label) {
         if (!TextUtils.isEmpty(label)) {
             TIP_COLLAPSE = label;
         }
     }
 
+    /**
+     * 设置展开提示图标，在setText方法之前调用
+     * @param drawable 展开图标
+     */
     public void setExpandDrawable(Drawable drawable) {
         if (drawable != null) {
             mExpandDrawable = drawable;
@@ -199,6 +210,10 @@ public class ExpandableTextView extends LinearLayout {
         }
     }
 
+    /**
+     * 设置折叠提示图标，在setText方法之前调用
+     * @param drawable 折叠图标
+     */
     public void setCollapseDrawable(Drawable drawable) {
         if (drawable != null) {
             mCollapseDrawable = drawable;
@@ -210,6 +225,9 @@ public class ExpandableTextView extends LinearLayout {
         return mOriginText;
     }
 
+    /**
+     * 展开或收起文本
+     */
     public void toggleText() {
         if (mPosition == ALIGN_RIGHT) {
             mTvExpand.setVisibility(GONE);
@@ -219,7 +237,7 @@ public class ExpandableTextView extends LinearLayout {
             formatCollapseText(mOriginText);
         }
         //计算控件高度
-        expandHeight = getTextViewHeight(mTvContent) + (mPosition == ALIGN_RIGHT ? 2 : 0);//修正一下高度
+        int expandHeight = getTextViewHeight(mTvContent) + (mPosition == ALIGN_RIGHT ? 2 : 0);//稍微修正一下高度
         collapseHeight = getTextViewHeight(mTvContentTemp);
         Log.d(TAG, "展开高度" + expandHeight);
         Log.d(TAG, "收起高度" + collapseHeight);

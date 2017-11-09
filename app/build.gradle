@@ -37,6 +37,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     implementation project(path: ':baselib')
     implementation project(':expandable-textview')
+    //compile 'com.eric.android.view:expandable-textview:1.0.1'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     implementation "com.android.support:appcompat-v7:$rootProject.ext.supportVersion"
     implementation "com.android.support:support-v4:$rootProject.ext.supportVersion"

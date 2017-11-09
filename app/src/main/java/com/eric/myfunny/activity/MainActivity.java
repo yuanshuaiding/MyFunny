@@ -14,6 +14,7 @@ import com.eric.baselib.ioc.NetCheck;
 import com.eric.baselib.ioc.OnClicked;
 import com.eric.baselib.ioc.ViewUtils;
 import com.eric.myfunny.R;
+import com.eric.myfunny.view.ColorTrackTextView;
 import com.eric.myfunny.view.QQStepView;
 
 import java.util.ArrayList;
@@ -29,7 +30,10 @@ public class MainActivity extends BaseActivity {
     private ExpandableTextView expandableTextView;
     @BindView(R.id.btn_click)
     private Button btn_click;
+    @BindView(R.id.track_tv)
+    private ColorTrackTextView track_tv;
     private float mSteps = 65;
+    private boolean increase = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,10 +53,26 @@ public class MainActivity extends BaseActivity {
         qqStepView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mSteps = mSteps + 10;
-                if (mSteps > 300)
+                if (increase) {
+                    mSteps = mSteps + 10;
+                    track_tv.setDirection(ColorTrackTextView.DIRECT_LEFT_RIGHT);
+                } else {
+                    mSteps = mSteps - 10;
+                    track_tv.setDirection(ColorTrackTextView.DIRECT_RIGTH_LEFT);
+                }
+                if (mSteps > 300) {
                     mSteps = 300;
+                    increase = false;
+                }
+                if (mSteps < 0) {
+                    mSteps = 0;
+                    increase = true;
+                }
                 qqStepView.updateSteps(mSteps);
+
+                //计算比例设置文字渐变色
+                float rate = increase?mSteps / 300f:(1-mSteps/300);
+                track_tv.setProgress(rate);
             }
         });
     }

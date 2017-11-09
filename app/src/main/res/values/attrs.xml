@@ -29,4 +29,8 @@
         <!--自定义文字大小直接使用系统属性-->
         <attr name="android:textSize" />
     </declare-styleable>
+    <declare-styleable name="ColorTrackTextView">
+        <attr name="originColor" format="color" />
+        <attr name="trackColor" format="color" />
+    </declare-styleable>
 </resources>

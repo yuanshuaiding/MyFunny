@@ -246,10 +246,12 @@ public class ExpandableTextView extends LinearLayout {
         collapseHeight = getTextViewHeight(mTvContentTemp);
         Log.d(TAG, "展开高度" + expandHeight);
         Log.d(TAG, "收起高度" + collapseHeight);
+        final LinearLayout.LayoutParams layoutParams = (LayoutParams) mTvContentTemp.getLayoutParams();
         if (expandHeight <= collapseHeight) {
             //说明无需折叠
-            mTvContentTemp.setHeight(0);
-            mTvContent.setVisibility(VISIBLE);
+            layoutParams.height = 0;
+            mTvContentTemp.setLayoutParams(layoutParams);
+            mTvContent.setHeight(expandHeight);
             mTvExpand.setVisibility(GONE);
             return;
         } else {
@@ -258,7 +260,8 @@ public class ExpandableTextView extends LinearLayout {
             }
         }
         if (!clicledByUser) {
-            mTvContentTemp.setHeight(collapseHeight);
+            layoutParams.height = collapseHeight;
+            mTvContentTemp.setLayoutParams(layoutParams);
             mTvContent.setHeight(0);
             mIsExpand = false;
             if (mExpandDrawable != null) {
@@ -274,7 +277,8 @@ public class ExpandableTextView extends LinearLayout {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
                     mTvContent.setHeight((Integer) animation.getAnimatedValue());
-                    mTvContentTemp.setHeight(0);
+                    layoutParams.height = 0;
+                    mTvContentTemp.setLayoutParams(layoutParams);
                 }
             });
             anim.start();
@@ -292,7 +296,8 @@ public class ExpandableTextView extends LinearLayout {
                     mTvContent.setHeight(h);
                     if (h == collapseHeight) {
                         mTvContent.setHeight(0);
-                        mTvContentTemp.setHeight(collapseHeight);
+                        layoutParams.height = collapseHeight;
+                        mTvContentTemp.setLayoutParams(layoutParams);
                     }
                 }
             });

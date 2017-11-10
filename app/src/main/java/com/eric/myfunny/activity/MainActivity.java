@@ -75,6 +75,8 @@ public class MainActivity extends BaseActivity {
                 track_tv.setProgress(rate);
             }
         });
+
+        expandableTextView.setText("物流快递费上来看大家法兰克福数量的空间发了发数量的咖啡浪费苏勒德咖啡类似的减肥啦是否类似的会计分录快递费索拉卡的附近湿漉漉的咖啡机睡了多考几分死了地方数量的减肥了深刻的缴费胜利大街方式法律思考的缴费数量的风景类似的父级类似的减肥啦父类螺蛳粉");
     }
 
     @OnClicked(R.id.btn_click)

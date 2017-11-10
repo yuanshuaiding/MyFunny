@@ -3,46 +3,61 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:padding="5dp">
 
-    <com.eric.myfunny.view.QQStepView
-        android:id="@+id/qq_step"
-        android:layout_width="200dp"
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.eric.myfunny.view.QQStepView
+            android:id="@+id/qq_step"
+            android:layout_width="200dp"
+            android:layout_height="match_parent"
+            android:textColor="#e802cd"
+            android:textSize="28sp"
+            app:innerColor="#ce2c03"
+            app:lineWidth="10dp"
+            app:maxStep="2000"
+            app:outterColor="#e6c909"
+            app:step="369" />
+
+        <com.eric.android.view.ExpandableTextView
+            android:id="@+id/expand_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorAccent"
+            app:collapseDrawable="@mipmap/icon_content_collap"
+            app:expandDrawable="@mipmap/icon_content_expand"
+            app:lines="3"
+            app:position="bottom_center"
+            app:tipsColor="#08f017" />
+
+        <Button
+            android:id="@+id/btn_click"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:text="click me" />
+
+        <com.eric.myfunny.view.ColorTrackTextView
+            android:id="@+id/track_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#ffddcc"
+            android:padding="16dp"
+            android:text="@string/app_name"
+            android:textColor="@color/colorPrimaryDark"
+            app:trackColor="@color/colorAccent" />
+    </LinearLayout>
+
+
+    <com.eric.myfunny.view.LetterBarView
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:textColor="#e802cd"
-        android:textSize="28sp"
-        app:innerColor="#ce2c03"
-        app:lineWidth="10dp"
-        app:maxStep="2000"
-        app:outterColor="#e6c909"
-        app:step="369" />
-
-    <com.eric.android.view.ExpandableTextView
-        android:id="@+id/expand_tv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/colorAccent"
-        app:collapseDrawable="@mipmap/icon_content_collap"
-        app:expandDrawable="@mipmap/icon_content_expand"
-        app:lines="3"
-        app:position="bottom_center"
-        app:tipsColor="#08f017" />
-
-    <Button
-        android:id="@+id/btn_click"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        android:text="click me" />
-
-    <com.eric.myfunny.view.ColorTrackTextView
-        android:id="@+id/track_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/app_name"
-        android:padding="16dp"
-        app:trackColor="@color/colorAccent"
-        android:background="#ffddcc"
-        android:textColor="@color/colorPrimaryDark" />
+        android:layout_gravity="end"
+        android:padding="5dp"
+        android:textSize="14sp"
+        android:textColor="@color/colorPrimary" />
 </LinearLayout>

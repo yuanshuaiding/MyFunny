@@ -52,7 +52,7 @@ public class ExpandableTextView extends LinearLayout {
     private Drawable mCollapseDrawable;
     private Drawable mExpandDrawable;
     private int collapseHeight;
-    private boolean fromUser;
+    private boolean clicledByUser;
     private int mTextTotalWidth;
     /**
      * 提示文本的点击事件
@@ -101,8 +101,7 @@ public class ExpandableTextView extends LinearLayout {
         LayoutInflater.from(context).inflate(R.layout.layout_expandable_view, this, true);
         //获取文本控件
         mTvContent = findViewById(R.id.tv_content);
-        //mTvContent.setVisibility(GONE);
-        //mTvContent.setBackgroundDrawable(new ColorDrawable(0xffce2c03));
+        mTvContent.setHeight(0);
         mTvContentTemp = findViewById(R.id.tv_content_temp);
         mTvExpand = findViewById(R.id.tv_arrow);
         mTvExpand.setTextColor(mTipsColor);
@@ -121,14 +120,13 @@ public class ExpandableTextView extends LinearLayout {
         OnClickListener clickListener = new OnClickListener() {
             @Override
             public void onClick(View v) {
-                fromUser = true;
+                clicledByUser = true;
                 toggleText();
             }
         };
         mTvContent.setOnClickListener(clickListener);
         mTvContentTemp.setOnClickListener(clickListener);
         mTvExpand.setOnClickListener(clickListener);
-        fromUser = false;
         setText(mOriginText);
         //设置折叠展开标识控件的位置
         updateExpandArrowAndPosition(mPosition);
@@ -176,11 +174,13 @@ public class ExpandableTextView extends LinearLayout {
 
     public void setText(String text) {
         mIsExpand = !mIsExpand;
+        clicledByUser = false;
         initText(text);
     }
 
     /**
      * 设置展开提示语，在setText方法之前调用
+     *
      * @param label 展开提示语，如“展开”
      */
     public void setExpandLabel(String label) {
@@ -191,6 +191,7 @@ public class ExpandableTextView extends LinearLayout {
 
     /**
      * 设置折叠提示语，在setText方法之前调用
+     *
      * @param label 折叠提示语，如“收起”
      */
     public void seCollapseLabel(String label) {
@@ -201,6 +202,7 @@ public class ExpandableTextView extends LinearLayout {
 
     /**
      * 设置展开提示图标，在setText方法之前调用
+     *
      * @param drawable 展开图标
      */
     public void setExpandDrawable(Drawable drawable) {
@@ -212,6 +214,7 @@ public class ExpandableTextView extends LinearLayout {
 
     /**
      * 设置折叠提示图标，在setText方法之前调用
+     *
      * @param drawable 折叠图标
      */
     public void setCollapseDrawable(Drawable drawable) {
@@ -229,6 +232,8 @@ public class ExpandableTextView extends LinearLayout {
      * 展开或收起文本
      */
     public void toggleText() {
+        //修改展开折叠标志
+        mIsExpand = !mIsExpand;
         if (mPosition == ALIGN_RIGHT) {
             mTvExpand.setVisibility(GONE);
             mTvContent.setMovementMethod(LinkMovementMethod.getInstance());
@@ -241,9 +246,9 @@ public class ExpandableTextView extends LinearLayout {
         collapseHeight = getTextViewHeight(mTvContentTemp);
         Log.d(TAG, "展开高度" + expandHeight);
         Log.d(TAG, "收起高度" + collapseHeight);
-        if (expandHeight == collapseHeight) {
+        if (expandHeight <= collapseHeight) {
             //说明无需折叠
-            mTvContentTemp.setVisibility(GONE);
+            mTvContentTemp.setHeight(0);
             mTvContent.setVisibility(VISIBLE);
             mTvExpand.setVisibility(GONE);
             return;
@@ -252,10 +257,14 @@ public class ExpandableTextView extends LinearLayout {
                 mTvExpand.setVisibility(VISIBLE);
             }
         }
-        if (!fromUser) {
-            mTvContentTemp.setVisibility(VISIBLE);
-            mTvContent.setVisibility(GONE);
-            mIsExpand = !mIsExpand;
+        if (!clicledByUser) {
+            mTvContentTemp.setHeight(collapseHeight);
+            mTvContent.setHeight(0);
+            mIsExpand = false;
+            if (mExpandDrawable != null) {
+                mTvExpand.setCompoundDrawablesWithIntrinsicBounds(null, null, mExpandDrawable, null);
+            }
+            mTvExpand.setText(TIP_EXPAND);
             return;
         }
         if (mIsExpand) {
@@ -265,8 +274,7 @@ public class ExpandableTextView extends LinearLayout {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
                     mTvContent.setHeight((Integer) animation.getAnimatedValue());
-                    mTvContent.setVisibility(VISIBLE);
-                    mTvContentTemp.setVisibility(GONE);
+                    mTvContentTemp.setHeight(0);
                 }
             });
             anim.start();
@@ -283,8 +291,8 @@ public class ExpandableTextView extends LinearLayout {
                     int h = (Integer) animation.getAnimatedValue();
                     mTvContent.setHeight(h);
                     if (h == collapseHeight) {
-                        mTvContent.setVisibility(GONE);
-                        mTvContentTemp.setVisibility(VISIBLE);
+                        mTvContent.setHeight(0);
+                        mTvContentTemp.setHeight(collapseHeight);
                     }
                 }
             });
@@ -294,8 +302,6 @@ public class ExpandableTextView extends LinearLayout {
             }
             mTvExpand.setText(TIP_EXPAND);
         }
-        //修改展开折叠标志
-        mIsExpand = !mIsExpand;
     }
 
     /**
@@ -335,7 +341,7 @@ public class ExpandableTextView extends LinearLayout {
             spannable.append(ellipsizeText);
             spannable.append(ELLIPSE);
             // 设置样式
-            setSpan(spannable);
+            setSpan(spannable, false);
             mTvContentTemp.setText(spannable);
         }
     }
@@ -372,7 +378,7 @@ public class ExpandableTextView extends LinearLayout {
                 text += space;
             }
             SpannableStringBuilder spannable = new SpannableStringBuilder(text);
-            setSpan(spannable);
+            setSpan(spannable, true);
             mTvContent.setText(spannable);
         }
 
@@ -383,13 +389,13 @@ public class ExpandableTextView extends LinearLayout {
      *
      * @param spannable 需修改样式的文本
      */
-    private void setSpan(SpannableStringBuilder spannable) {
+    private void setSpan(SpannableStringBuilder spannable, boolean isExpand) {
         Drawable drawable;
         // 添加一点空白用于分隔
         spannable.append("  ");
         int tipsLen;
         // 判断是展开还是收起
-        if (mIsExpand) {
+        if (isExpand) {
             spannable.append(TIP_COLLAPSE);
             // 插入图片
             drawable = mCollapseDrawable;
@@ -417,10 +423,15 @@ public class ExpandableTextView extends LinearLayout {
         int height;
         int lines = textView.getLineCount();
         int lineHight = textView.getLineHeight();
+        if (textView == mTvContentTemp) {
+            if (lines > mLines)
+                lines = mLines;
+        }
         height = lines * lineHight;
         int pt = textView.getPaddingTop();
         int pb = textView.getPaddingBottom();
-        return height + pt + pb;
+        height = height + pt + pb;
+        return height;
     }
 
     /**

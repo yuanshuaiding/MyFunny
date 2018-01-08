@@ -246,6 +246,7 @@ public class ExpandableTextView extends LinearLayout {
         collapseHeight = getTextViewHeight(mTvContentTemp);
         Log.d(TAG, "展开高度" + expandHeight);
         Log.d(TAG, "收起高度" + collapseHeight);
+        //此处使用LinearLayout.LayoutParams控制辅助文本控件mTvContentTemp的高度，如果直接setHeight会失去ellipsize效果
         final LinearLayout.LayoutParams layoutParams = (LayoutParams) mTvContentTemp.getLayoutParams();
         if (expandHeight <= collapseHeight) {
             //说明无需折叠

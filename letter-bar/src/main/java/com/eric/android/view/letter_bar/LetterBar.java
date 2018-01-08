@@ -1,4 +1,4 @@
-package com.eric.myfunny.view;
+package com.eric.android.view.letter_bar;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -6,12 +6,10 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
-
-import com.eric.myfunny.R;
 
 /**
  * author : Eric
@@ -21,32 +19,34 @@ import com.eric.myfunny.R;
  * version: 1.0
  */
 
-public class LetterBarView extends View {
+public class LetterBar extends View {
     private final Paint mPaint;
     private int mColor = Color.BLACK;
     private int mHighlightColor = Color.RED;
-    private int mSize = 14;
+    private float mSize = sp2px(14);
+
     private static final String[] mLetters = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"
             , "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
     private int mLetterIndex = -1;
     private boolean showBg;//显示背景色
+    private OnLetterChangeListner onLetterChangeListener;//选中字母后的回调
 
-    public LetterBarView(Context context) {
+    public LetterBar(Context context) {
         this(context, null);
     }
 
-    public LetterBarView(Context context, @Nullable AttributeSet attrs) {
+    public LetterBar(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public LetterBarView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public LetterBar(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         //获取属性
-        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.LetterBarView);
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.LetterBar);
         if (typedArray != null) {
-            mColor = typedArray.getColor(R.styleable.LetterBarView_android_textColor, mColor);
-            mHighlightColor = typedArray.getColor(R.styleable.LetterBarView_highlightColor, mHighlightColor);
-            mSize = typedArray.getDimensionPixelSize(R.styleable.LetterBarView_android_textSize, mSize);
+            mColor = typedArray.getColor(R.styleable.LetterBar_android_textColor, mColor);
+            mHighlightColor = typedArray.getColor(R.styleable.LetterBar_highlightColor, mHighlightColor);
+            mSize = typedArray.getDimensionPixelSize(R.styleable.LetterBar_android_textSize, (int) mSize);
             typedArray.recycle();
         }
         mPaint = new Paint();
@@ -54,6 +54,10 @@ public class LetterBarView extends View {
         mPaint.setColor(mColor);
         mPaint.setTextSize(mSize);
         mPaint.setAntiAlias(true);
+    }
+
+    private float sp2px(int sp) {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp, getResources().getDisplayMetrics());
     }
 
     @Override
@@ -67,9 +71,9 @@ public class LetterBarView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         //绘制背景色
-        if(showBg){
+        if (showBg) {
             mPaint.setColor(Color.parseColor("#10000000"));
-            canvas.drawRect(0,0,getWidth(),getHeight(),mPaint);
+            canvas.drawRect(0, 0, getWidth(), getHeight(), mPaint);
         }
         //绘制字母，需要先计算baseline
         int letterHeight = (getHeight() - getPaddingTop() - getPaddingBottom()) / mLetters.length;
@@ -94,23 +98,38 @@ public class LetterBarView extends View {
         float y = event.getY();
         //计算该坐标对应的字母索引
         mLetterIndex = (int) ((y - getPaddingTop()) / (getHeight() - getPaddingTop() - getPaddingBottom()) * mLetters.length);
+        String letter = mLetters[mLetterIndex];
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
+            case MotionEvent.ACTION_MOVE:
                 //开始触摸
                 showBg = true;
-                invalidate();
-                break;
-            case MotionEvent.ACTION_MOVE:
                 //手指滑动
+                if (onLetterChangeListener != null) {
+                    onLetterChangeListener.onLetterChanged(letter);
+                }
                 invalidate();
                 break;
             case MotionEvent.ACTION_UP:
                 //手指抬起
                 mLetterIndex = -1;
                 showBg = false;
+                if (onLetterChangeListener != null) {
+                    onLetterChangeListener.onLetterChoosed(letter);
+                }
                 invalidate();
                 break;
         }
         return true;
+    }
+
+    public void setOnLetterChangeListener(OnLetterChangeListner listener) {
+        this.onLetterChangeListener = listener;
+    }
+
+    public interface OnLetterChangeListner {
+        void onLetterChanged(String letter);
+
+        void onLetterChoosed(String letter);
     }
 }

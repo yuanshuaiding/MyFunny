@@ -64,7 +64,7 @@ public class MyTextView extends View {
     /**
      * 自定义View的测量方法，用于确定布局的宽高，由父布局调用，可以在此通过setMeasuredDimension方法修改你真正需要的尺寸
      *
-     * @param widthMeasureSpec:该32位int值包含2部分信息：前2位存储模式（如：MeasureSpec.AT_MOST），后30位存储值
+     * @param widthMeasureSpec:该32位int值包含2部分信息：前2位存储模式（如：MeasureSpec.AT_MOST），后30位存储值,代表了父布局带当前布局的尺寸限制
      * @param heightMeasureSpec                                                       同上
      */
     @Override
@@ -83,6 +83,9 @@ public class MyTextView extends View {
         //获取的值是32位widthMeasureSpec的后30位，即值
         width = MeasureSpec.getSize(widthMeasureSpec);
         height = MeasureSpec.getSize(heightMeasureSpec);
+        //调用resolveSize确保最后计算的尺寸满足父布局限制
+        width=resolveSize(width,widthMeasureSpec);
+        height=resolveSize(height,heightMeasureSpec);
         //通过该内置方法最终完成设置控件的宽高值
         setMeasuredDimension(width, height);
     }

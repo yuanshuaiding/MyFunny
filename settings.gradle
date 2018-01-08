@@ -1,1 +1,1 @@
-include ':app', ':baselib', ':expandable-textview'
+include ':app', ':base-android-lib', ':expandable-textview', ':colorful-piechart', ':letter-bar'

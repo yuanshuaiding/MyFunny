@@ -50,14 +50,32 @@
             android:text="@string/app_name"
             android:textColor="@color/colorPrimaryDark"
             app:trackColor="@color/colorAccent" />
+
+        <com.eric.myfunny.view.ManyShapes
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <com.eric.myfunny.view.LetterBarView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="end"
-        android:padding="5dp"
-        android:textSize="14sp"
-        android:textColor="@color/colorPrimary" />
+        <com.eric.android.view.letter_bar.LetterBar
+            android:id="@+id/letter_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:padding="5dp"
+            android:textColor="@color/colorPrimary"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_letter"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/shape_cicle_black"
+            android:gravity="center"
+            android:textColor="#ffffffff" />
+    </RelativeLayout>
 </LinearLayout>

@@ -33,9 +33,5 @@
         <attr name="originColor" format="color" />
         <attr name="trackColor" format="color" />
     </declare-styleable>
-    <declare-styleable name="LetterBarView">
-        <attr name="android:textColor" />
-        <attr name="android:textSize" />
-        <attr name="highlightColor" format="color" />
-    </declare-styleable>
+
 </resources>

@@ -1,5 +1,7 @@
 package com.eric.myfunny.activity;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -7,8 +9,10 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewCompat;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.eric.android.view.ExpandableTextView;
+import com.eric.android.view.letter_bar.LetterBar;
 import com.eric.baselib.ioc.BindView;
 import com.eric.baselib.ioc.NetCheck;
 import com.eric.baselib.ioc.OnClicked;
@@ -32,6 +36,10 @@ public class MainActivity extends BaseActivity {
     private Button btn_click;
     @BindView(R.id.track_tv)
     private ColorTrackTextView track_tv;
+    @BindView(R.id.letter_bar)
+    private LetterBar letter_bar;
+    @BindView(R.id.tv_letter)
+    private TextView tv_letter;
     private float mSteps = 65;
     private boolean increase = true;
 
@@ -47,36 +55,53 @@ public class MainActivity extends BaseActivity {
 //        onClick1(null);
         //ViewCompat.setTranslationZ(btn_click, 10);
         ViewCompat.setElevation(btn_click, 100);
+        tv_letter.setVisibility(View.GONE);
         qqStepView.setMaxSteps(300);
         qqStepView.setDuration(1000);
         qqStepView.updateSteps(mSteps);
-        qqStepView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (increase) {
-                    mSteps = mSteps + 10;
-                    track_tv.setDirection(ColorTrackTextView.DIRECT_LEFT_RIGHT);
-                } else {
-                    mSteps = mSteps - 10;
-                    track_tv.setDirection(ColorTrackTextView.DIRECT_RIGTH_LEFT);
-                }
-                if (mSteps > 300) {
-                    mSteps = 300;
-                    increase = false;
-                }
-                if (mSteps < 0) {
-                    mSteps = 0;
-                    increase = true;
-                }
-                qqStepView.updateSteps(mSteps);
-
-                //计算比例设置文字渐变色
-                float rate = increase?mSteps / 300f:(1-mSteps/300);
-                track_tv.setProgress(rate);
+        qqStepView.setOnClickListener(v -> {
+            if (increase) {
+                mSteps = mSteps + 10;
+                track_tv.setDirection(ColorTrackTextView.DIRECT_LEFT_RIGHT);
+            } else {
+                mSteps = mSteps - 10;
+                track_tv.setDirection(ColorTrackTextView.DIRECT_RIGTH_LEFT);
             }
+            if (mSteps > 300) {
+                mSteps = 300;
+                increase = false;
+            }
+            if (mSteps < 0) {
+                mSteps = 0;
+                increase = true;
+            }
+            qqStepView.updateSteps(mSteps);
+
+            //计算比例设置文字渐变色
+            float rate = increase ? mSteps / 300f : (1 - mSteps / 300);
+            track_tv.setProgress(rate);
         });
 
         expandableTextView.setText("物流快递费上来看大家法兰克福数量的空间发了发数量的咖啡浪费苏勒德咖啡类似的减肥啦是否类似的会计分录快递费索拉卡的附近湿漉漉的咖啡机睡了多考几分死了地方数量的减肥了深刻的缴费胜利大街方式法律思考的缴费数量的风景类似的父级类似的减肥啦父类螺蛳粉");
+        letter_bar.setOnLetterChangeListener(new LetterBar.OnLetterChangeListner() {
+            @Override
+            public void onLetterChanged(String letter) {
+                tv_letter.setVisibility(View.VISIBLE);
+                tv_letter.setAlpha(1);
+                tv_letter.setText(letter);
+            }
+
+            @Override
+            public void onLetterChoosed(String letter) {
+                tv_letter.animate().alpha(0).setDuration(500).setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        tv_letter.setVisibility(View.GONE);
+                    }
+                });
+            }
+        });
     }
 
     @OnClicked(R.id.btn_click)

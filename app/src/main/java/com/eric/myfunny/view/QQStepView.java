@@ -165,12 +165,7 @@ public class QQStepView extends View {
         if (mCurrentStep > mMaxStep)
             mCurrentStep = mMaxStep;
         ValueAnimator animator = ValueAnimator.ofFloat(0, mCurrentStep).setDuration((long) mDuration);
-        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                initSteps((Float) animation.getAnimatedValue());
-            }
-        });
+        animator.addUpdateListener(animation -> initSteps((Float) animation.getAnimatedValue()));
         animator.start();
     }
 

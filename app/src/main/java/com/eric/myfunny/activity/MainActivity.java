@@ -2,6 +2,7 @@ package com.eric.myfunny.activity;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -20,6 +21,7 @@ import com.eric.baselib.ioc.ViewUtils;
 import com.eric.myfunny.R;
 import com.eric.myfunny.view.ColorTrackTextView;
 import com.eric.myfunny.view.QQStepView;
+import com.eric.myfunny.view.RiskRadarView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +32,8 @@ public class MainActivity extends BaseActivity {
 
     @BindView(R.id.qq_step)
     private QQStepView qqStepView;
+    @BindView(R.id.risk_radar)
+    private RiskRadarView riskRadar;
     @BindView(R.id.expand_tv)
     private ExpandableTextView expandableTextView;
     @BindView(R.id.btn_click)
@@ -82,6 +86,10 @@ public class MainActivity extends BaseActivity {
             track_tv.setProgress(rate);
         });
 
+        riskRadar.setMaxPrograss(100);
+        riskRadar.setPrograss(50);
+        riskRadar.setLevel(1);
+
         expandableTextView.setText("物流快递费上来看大家法兰克福数量的空间发了发数量的咖啡浪费苏勒德咖啡类似的减肥啦是否类似的会计分录快递费索拉卡的附近湿漉漉的咖啡机睡了多考几分死了地方数量的减肥了深刻的缴费胜利大街方式法律思考的缴费数量的风景类似的父级类似的减肥啦父类螺蛳粉");
         letter_bar.setOnLetterChangeListener(new LetterBar.OnLetterChangeListner() {
             @Override
@@ -102,6 +110,13 @@ public class MainActivity extends BaseActivity {
                 });
             }
         });
+
+        new AsyncTask<Void,Void,Void>(){
+            @Override
+            protected Void doInBackground(Void... voids) {
+                return null;
+            }
+        }.execute();
     }
 
     @OnClicked(R.id.btn_click)

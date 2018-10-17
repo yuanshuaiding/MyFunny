@@ -1,6 +1,8 @@
 package com.eric.baselib.utils;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -8,19 +10,81 @@ import android.view.View;
 
 import com.eric.baselib.views.snack.MySnackbar;
 
+import java.lang.reflect.InvocationTargetException;
+
 import static com.eric.baselib.views.snack.MySnackbar.APPEAR_FROM_TOP_TO_DOWN;
 
 /**
  * author : Eric
  * e-mail : yuanshuai@bertadata.com
  * time   : 2017/10/11
- * desc   : 常用方法：
- * 1.dip px转换
- * 2.快速toast提示
+ * desc   : 常用方法(使用前需要)：
+ * 1.App全局应用信息管理
+ * 2.dip px转换
+ * 3.快速toast提示
  * version: 1.0
  */
 
 public class Util {
+    @SuppressLint("StaticFieldLeak")
+    private static Application sApplication;
+
+    private Util() {
+        throw new UnsupportedOperationException("u can't instantiate me...");
+    }
+
+    public static void init(final Context context) {
+        if (context == null) {
+            init(getApplicationByReflect());
+            return;
+        }
+        init((Application) context.getApplicationContext());
+    }
+
+    public static void init(final Application app) {
+        if (sApplication == null) {
+            if (app == null) {
+                sApplication = getApplicationByReflect();
+            } else {
+                sApplication = app;
+            }
+        }
+    }
+
+    private static Application getApplicationByReflect() {
+        try {
+            @SuppressLint("PrivateApi")
+            Class<?> activityThread = Class.forName("android.app.ActivityThread");
+            Object thread = activityThread.getMethod("currentActivityThread").invoke(null);
+            Object app = activityThread.getMethod("getApplication").invoke(thread);
+            if (app == null) {
+                throw new NullPointerException("u should init first");
+            }
+            return (Application) app;
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        throw new NullPointerException("u should init first");
+    }
+
+    /**
+     * Return the context of Application object.
+     *
+     * @return the context of Application object
+     */
+    public static Application getApp() {
+        if (sApplication != null) return sApplication;
+        Application app = getApplicationByReflect();
+        init(app);
+        return app;
+    }
+
     /**
      * 将dip或dp值转换为px值，保证尺寸大小不变
      */
@@ -78,4 +142,12 @@ public class Util {
         }
         return false;
     }
+
+    static final AdaptScreenArgs ADAPT_SCREEN_ARGS = new AdaptScreenArgs();
+
+    static class AdaptScreenArgs {
+        int     sizeInPx;
+        boolean isVerticalSlide;
+    }
+
 }

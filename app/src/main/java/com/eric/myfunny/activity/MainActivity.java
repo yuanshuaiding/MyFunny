@@ -2,7 +2,8 @@ package com.eric.myfunny.activity;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.os.AsyncTask;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -111,17 +112,38 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        new AsyncTask<Void,Void,Void>(){
-            @Override
-            protected Void doInBackground(Void... voids) {
-                return null;
-            }
-        }.execute();
+        //获取schema
+        Intent intent = getIntent();
+        if (intent.getData() != null) {
+            Uri uri = intent.getData();
+            uri.getScheme();//获取scheme
+            uri.getHost();//获取host
+            uri.getAuthority();//获取authority
+            String summaryId = uri.getQueryParameter("summaryId");//获取传递参数
+            expandableTextView.setText(summaryId);
+        }
     }
 
     @OnClicked(R.id.btn_click)
     private void changeText() {
         expandableTextView.setText(expandableTextView.getText() + " 我是后来添加的");
+    }
+
+    @OnClicked(R.id.btn_send_msg)
+    private void sendMsg() {
+        try {
+            Uri uri = Uri.parse("smsto:" + "15050160446");
+            Intent intent = new Intent(Intent.ACTION_SENDTO, uri);
+            intent.putExtra("sms_body", "bertadata.qixinbao://?summaryId=\"1234\"");
+            startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @OnClicked(R.id.btn_coordinator)
+    private void goCoordinatorLayout() {
+        CoordinatorLayoutDemoActivity.action(this);
     }
 
     @OnClicked(R.id.ll_section1)
